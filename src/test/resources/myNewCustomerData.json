@@ -1,0 +1,14 @@
+{
+  "firstName": "testkaro",
+  "lastName": "testkarolast",
+  "password": "Password",
+  "birthDate": "2",
+  "birthMonth": "2",
+  "birthYear": "1990",
+  "address": "address1",
+  "city": "city1",
+  "state": "Texas",
+  "postCode": "75462",
+  "mobileNumber": "0909090909"
+
+}

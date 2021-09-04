@@ -1,30 +1,34 @@
 package org.selenium.pom.tests;
 import org.openqa.selenium.By;
 import org.selenium.pom.base.BaseTest;
+import org.selenium.pom.objects.NewCustomerData;
+import org.selenium.pom.objects.Products;
 import org.selenium.pom.pages.*;
 import org.selenium.pom.utils.FakerUtils;
+import org.selenium.pom.utils.JacksonUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 public class MyFirstTestCase extends BaseTest {
 
     @Test
-    public void checkoutUsingExistingCustomerPayWithBankWire() throws InterruptedException {
+    public void checkoutUsingExistingCustomerPayWithBankWire() throws InterruptedException, IOException {
 
-        driver.get("http://automationpractice.com/index.php");
-        driver.getCurrentUrl().contains("http://automationpractice.com/index.php");
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(driver).load();
+        Products products = new Products(2);
         //verify storePage title
         Assert.assertEquals(homePage.getPageTitle(),"My Store");
-        homePage.hoverOverElement().addToCart();
+        homePage.hoverOverElement(products.getName()).addToCart(products.getId());
         //verify product text on cartPage
         Thread.sleep(10000);
-        Assert.assertEquals(homePage.getProductTitleOnCartPopup(),"Blouse");
+        Assert.assertEquals(homePage.getProductTitleOnCartPopup(),products.getName());
         CartPage cartPage = homePage.proceedToCheckOut();
         //verify checkoutPage or orderPage title
         Assert.assertEquals(cartPage.getCartPageTitle(),"Order - My Store");
         //verify product text on checkoutPage
-        Assert.assertEquals(cartPage.getProductTitleOnCartPage(),"Blouse");
+        Assert.assertEquals(cartPage.getProductTitleOnCartPage(),products.getName());
         LoginPage loginPage = cartPage.cartPageSubmit();
         //verify loginPage title
         Assert.assertEquals(loginPage.getLoginPageTitle(),"Login - My Store");
@@ -49,13 +53,13 @@ public class MyFirstTestCase extends BaseTest {
     }
 
     @Test
-    public void checkoutUsingExistingCustomerPayWithCheck() throws InterruptedException {
+    public void checkoutUsingExistingCustomerPayWithCheck() throws InterruptedException, IOException {
 
-        driver.get("http://automationpractice.com/index.php");
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(driver).load();
+        Products products = new Products(3);
         //verify storePage title
         Assert.assertEquals(homePage.getPageTitle(),"My Store");
-        homePage.hoverOverElement().addToCart();
+        homePage.hoverOverElement(products.getName()).addToCart(products.getId());
         //verify product text on cartPage
         Thread.sleep(10000);
         CartPage cartPage = homePage.proceedToCheckOut();
@@ -85,11 +89,10 @@ public class MyFirstTestCase extends BaseTest {
     @Test
     public void checkoutUsingNewCustomer() throws InterruptedException {
 
-        driver.get("http://automationpractice.com/index.php");
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(driver).load();
         //verify storePage title
         Assert.assertEquals(homePage.getPageTitle(),"My Store");
-        homePage.hoverOverElement().addToCart();
+        homePage.hoverOverElement("Printed Chiffon Dress").addToCart(7);
         //verify product text on cartPage
         //Thread.sleep(10000);
         CartPage cartPage = homePage.proceedToCheckOut();
@@ -116,6 +119,46 @@ public class MyFirstTestCase extends BaseTest {
                 .setState("Texas")
                 .setPostCode("75462")
                 .setMobileNumber("0909090909")
+                .clickOnSubmitBtn();
+        //verify Address on orderPage
+        Assert.assertEquals(orderCheckoutPage.getBillingAddressTitle(),"YOUR BILLING ADDRESS");
+        //click on proceed to checkout on billing address confirm
+        orderCheckoutPage.submitBillingAddress();
+        //click on proceed to checkout on shipping address confirm
+        orderCheckoutPage.clickOptInCheckbox().submitShippingAddress();
+        //verify payment section
+        //pay by wireBank
+        orderCheckoutPage.selectPayByCheck();
+        //verify order summary
+        Assert.assertEquals(orderCheckoutPage.verifyPaymentMethodTitle(),"CHECK PAYMENT");
+        orderCheckoutPage.clickOnConfirmOrderBtn();
+        //verify order confirmation
+        Assert.assertEquals(orderCheckoutPage.verifyOrderConfirmationMessage(),"ORDER CONFIRMATION");
+    }
+
+    @Test
+    public void checkoutUsingNewCustomerByPOJO() throws InterruptedException, IOException {
+        NewCustomerData newCustomerData = new NewCustomerData();
+        Products products = new Products(7);
+        newCustomerData=JacksonUtils.deserializeJson("myNewCustomerData.json",newCustomerData.getClass());
+        HomePage homePage = new HomePage(driver).load();
+        //verify storePage title
+        Assert.assertEquals(homePage.getPageTitle(),"My Store");
+        homePage.hoverOverElement(products.getName()).addToCart(products.getId());
+        CartPage cartPage = homePage.proceedToCheckOut();
+        //verify checkoutPage or orderPage title
+        Assert.assertEquals(cartPage.getCartPageTitle(),"Order - My Store");
+        //verify product text on checkoutPage
+        LoginPage loginPage = cartPage.cartPageSubmit();
+        //verify loginPage title
+        Assert.assertEquals(loginPage.getLoginPageTitle(),"Login - My Store");
+        CreateCustomerPage createCustomerPage = loginPage
+                .enterNewUserEmail(FakerUtils.getRandomEmail())
+                .clickOnCreateCustomerBtn();
+        Thread.sleep(5000);
+        Assert.assertEquals(createCustomerPage.getPageTitle(),"CREATE AN ACCOUNT");
+        OrderCheckoutPage orderCheckoutPage = createCustomerPage
+                .setCreateNewCustomer(newCustomerData)
                 .clickOnSubmitBtn();
         //verify Address on orderPage
         Assert.assertEquals(orderCheckoutPage.getBillingAddressTitle(),"YOUR BILLING ADDRESS");

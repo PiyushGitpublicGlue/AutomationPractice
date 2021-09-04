@@ -3,6 +3,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.selenium.pom.base.BasePage;
+import org.selenium.pom.objects.NewCustomerData;
 
 public class CreateCustomerPage extends BasePage {
     private By setMaleGender = By.id("id_gender1");
@@ -30,6 +31,20 @@ public class CreateCustomerPage extends BasePage {
         return driver.findElement(getPageTitle).getText();
     }
 
+    public CreateCustomerPage setCreateNewCustomer(NewCustomerData newCustomerData){
+        return  setMaleGender()
+                .setFirstName(newCustomerData.getFirstName())
+                .setLastName(newCustomerData.getLastName())
+                .setPassword(newCustomerData.getPassword())
+                .setDOB(newCustomerData.getBirthDate(), newCustomerData.getBirthMonth(), newCustomerData.getBirthYear())
+                .selectPromo()
+                .setAddress(newCustomerData.getAddress())
+                .setCity(newCustomerData.getCity())
+                .setState(newCustomerData.getState())
+                .setPostCode(newCustomerData.getPostCode())
+                .setMobileNumber(newCustomerData.getMobileNumber());
+    }
+
     public CreateCustomerPage setMaleGender(){
         driver.findElement(setMaleGender).click();
         return this;
@@ -52,11 +67,11 @@ public class CreateCustomerPage extends BasePage {
     }
     public CreateCustomerPage setDOB(String date, String month, String year){
         Select selectDay = new Select(driver.findElement(setBirthDate));
-        selectDay.selectByValue(date.toLowerCase());
+        selectDay.selectByValue(date);
         Select selectMonth = new Select(driver.findElement(setBirthMonth));
-        selectMonth.selectByValue(month.toLowerCase());//Month
+        selectMonth.selectByValue(month);//Month
         Select selectYear = new Select(driver.findElement(setBirthYear));
-        selectYear.selectByValue(year.toLowerCase());//Years
+        selectYear.selectByValue(year);//Years
         return this;
     }
     public CreateCustomerPage selectPromo(){

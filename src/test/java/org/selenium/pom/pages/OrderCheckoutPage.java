@@ -2,6 +2,7 @@ package org.selenium.pom.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.selenium.pom.base.BasePage;
 
 public class OrderCheckoutPage extends BasePage {
@@ -9,7 +10,7 @@ public class OrderCheckoutPage extends BasePage {
     private By getBillingAddressTitle = By.xpath("//*[@id='address_invoice']//h3");
     private By submitBillingAddressBtn = By.xpath("//*[@name='processAddress']");
     private By getShippingAddressTitle = By.xpath("//div//h1");
-    private By clickOptInCheckbox = By.id("cgv");
+    private By clickOptInCheckbox = By.id("uniform-cgv");
     private By submitShippingAddressBtn = By.cssSelector(".standard-checkout");
     private By getPaymentVerificationTitle= By.xpath("//div//h1");
     private By selectPayByWireBank = By.xpath("//*[@title='Pay by bank wire']");
@@ -25,46 +26,58 @@ public class OrderCheckoutPage extends BasePage {
     }
 
     public String getBillingAddressTitle(){
-        return driver.findElement(getBillingAddressTitle).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(getBillingAddressTitle)).getText();
     }
     public String getShippingAddressTitle(){
-        return driver.findElement(getShippingAddressTitle).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(getShippingAddressTitle)).getText();
     }
     public OrderCheckoutPage submitBillingAddress(){
-        driver.findElement(submitBillingAddressBtn).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(submitBillingAddressBtn)).click();
         return this;
     }
     public OrderCheckoutPage submitShippingAddress(){
-        driver.findElement(submitShippingAddressBtn).click();
+        wait.until(ExpectedConditions.elementToBeClickable(submitShippingAddressBtn)).click();
         return this;
     }
     public OrderCheckoutPage clickOptInCheckbox(){
-        driver.findElement(clickOptInCheckbox).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(clickOptInCheckbox)).click();
         return this;
     }
     public String getPaymentVerificationTitle(){
-        return driver.findElement(getPaymentVerificationTitle).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(getPaymentVerificationTitle)).getText();
     }
     public OrderCheckoutPage selectPayByWireBank(){
-        driver.findElement(selectPayByWireBank).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(selectPayByWireBank)).click();
         return this;
     }
     public OrderCheckoutPage selectPayByCheck(){
-        driver.findElement(selectPayByCheck).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(selectPayByCheck)).click();
         return this;
     }
     public String getOrderSummaryTitle(){
-        return driver.findElement(getOrderSummaryTitle).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(getOrderSummaryTitle)).getText();
+
     }
     public String verifyPaymentMethodTitle(){
-        return driver.findElement(verifyPaymentMethodTitle).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(verifyPaymentMethodTitle)).getText();
     }
     public OrderCheckoutPage clickOnConfirmOrderBtn(){
-        driver.findElement(clickOnConfirmOderBtn).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(clickOnConfirmOderBtn)).click();
         return this;
     }
     public String verifyOrderConfirmationMessage(){
-        return driver.findElement(verifyOrderConfirmationMessage).getText();
+
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(verifyOrderConfirmationMessage)).getText();
     }
 
 }

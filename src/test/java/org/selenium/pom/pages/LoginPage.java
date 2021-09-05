@@ -2,8 +2,9 @@ package org.selenium.pom.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.selenium.pom.base.BasePage;
-import org.selenium.pom.utils.FakerUtils;
+import org.selenium.pom.objects.User;
 
 public class LoginPage extends BasePage {
 
@@ -22,19 +23,44 @@ public class LoginPage extends BasePage {
     }
 
     public OrderCheckoutPage doLogin(String email, String password){
-        driver.findElement(getEmail).sendKeys(email);
-        driver.findElement(getPassword).sendKeys(password);
-        driver.findElement(clickLoginBtn).click();
+        enterOldUserEmail(email);
+        enterOldUserPwd(password);
+        submitOldUserBtn();
+        return new OrderCheckoutPage(driver);
+    }
+
+    public OrderCheckoutPage setLoginCred(User user){
+        enterOldUserEmail(user.getUserEmail());
+        enterOldUserPwd(user.getPassword());
+        submitOldUserBtn();
         return new OrderCheckoutPage(driver);
     }
 
     public LoginPage enterNewUserEmail(String email){
-        driver.findElement(enterNewUserEmail).sendKeys(email);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(enterNewUserEmail)).sendKeys(email);
         return this;
     }
 
+    public LoginPage enterOldUserEmail(String email){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(getEmail)).sendKeys(email);
+        return this;
+    }
+
+    public LoginPage enterOldUserPwd(String pwd){
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(getPassword)).sendKeys(pwd);
+        return this;
+    }
+
+    public LoginPage submitOldUserBtn(){
+        wait.until(ExpectedConditions.elementToBeClickable(clickLoginBtn)).click();
+        return this;
+    }
+
+
     public CreateCustomerPage clickOnCreateCustomerBtn(){
-        driver.findElement(clickOnCreateCustomerBtn).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(clickOnCreateCustomerBtn)).click();
         return new CreateCustomerPage(driver);
     }
 }

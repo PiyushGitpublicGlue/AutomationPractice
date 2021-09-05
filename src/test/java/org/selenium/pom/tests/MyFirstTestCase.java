@@ -3,6 +3,7 @@ import org.openqa.selenium.By;
 import org.selenium.pom.base.BaseTest;
 import org.selenium.pom.objects.NewCustomerData;
 import org.selenium.pom.objects.Products;
+import org.selenium.pom.objects.User;
 import org.selenium.pom.pages.*;
 import org.selenium.pom.utils.FakerUtils;
 import org.selenium.pom.utils.JacksonUtils;
@@ -18,11 +19,11 @@ public class MyFirstTestCase extends BaseTest {
 
         HomePage homePage = new HomePage(driver).load();
         Products products = new Products(2);
+        User user = new User("testpiyushauto@test.com","Test@12345");
         //verify storePage title
         Assert.assertEquals(homePage.getPageTitle(),"My Store");
         homePage.hoverOverElement(products.getName()).addToCart(products.getId());
         //verify product text on cartPage
-        Thread.sleep(10000);
         Assert.assertEquals(homePage.getProductTitleOnCartPopup(),products.getName());
         CartPage cartPage = homePage.proceedToCheckOut();
         //verify checkoutPage or orderPage title
@@ -32,7 +33,7 @@ public class MyFirstTestCase extends BaseTest {
         LoginPage loginPage = cartPage.cartPageSubmit();
         //verify loginPage title
         Assert.assertEquals(loginPage.getLoginPageTitle(),"Login - My Store");
-        OrderCheckoutPage orderCheckoutPage = loginPage.doLogin("testpiyushauto@test.com","Test@12345");
+        OrderCheckoutPage orderCheckoutPage = loginPage.setLoginCred(user);
         //verify Address on orderPage
         Assert.assertEquals(orderCheckoutPage.getBillingAddressTitle(),"YOUR BILLING ADDRESS");
         //click on proceed to checkout on billing address confirm
@@ -61,7 +62,6 @@ public class MyFirstTestCase extends BaseTest {
         Assert.assertEquals(homePage.getPageTitle(),"My Store");
         homePage.hoverOverElement(products.getName()).addToCart(products.getId());
         //verify product text on cartPage
-        Thread.sleep(10000);
         CartPage cartPage = homePage.proceedToCheckOut();
         //verify checkoutPage or orderPage title
         Assert.assertEquals(cartPage.getCartPageTitle(),"Order - My Store");
@@ -105,7 +105,6 @@ public class MyFirstTestCase extends BaseTest {
         CreateCustomerPage createCustomerPage = loginPage
                 .enterNewUserEmail(FakerUtils.getRandomEmail())
                 .clickOnCreateCustomerBtn();
-        Thread.sleep(3000);
         Assert.assertEquals(createCustomerPage.getPageTitle(),"CREATE AN ACCOUNT");
         OrderCheckoutPage orderCheckoutPage = createCustomerPage
                 .setMaleGender()
@@ -155,7 +154,6 @@ public class MyFirstTestCase extends BaseTest {
         CreateCustomerPage createCustomerPage = loginPage
                 .enterNewUserEmail(FakerUtils.getRandomEmail())
                 .clickOnCreateCustomerBtn();
-        Thread.sleep(5000);
         Assert.assertEquals(createCustomerPage.getPageTitle(),"CREATE AN ACCOUNT");
         OrderCheckoutPage orderCheckoutPage = createCustomerPage
                 .setCreateNewCustomer(newCustomerData)

@@ -1,20 +1,21 @@
 package org.selenium.pom.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.selenium.pom.base.BasePage;
 import org.selenium.pom.objects.NewCustomerData;
 
 public class CreateCustomerPage extends BasePage {
-    private By setMaleGender = By.id("id_gender1");
-    private By setFemaleGender = By.id("id_gender1");
+    private By setMaleGender = By.id("uniform-id_gender1");
+    private By setFemaleGender = By.id("uniform-id_gender2");
     private By setFirstName = By.id("customer_firstname");
     private By setLastName = By.id("customer_lastname");
     private By setPassword = By.id("passwd");
     private By setBirthDate = By.id("days");
     private By setBirthMonth = By.id("months");
     private By setBirthYear = By.id("years");
-    private By selectPromo = By.id("optin");
+    private By selectPromo = By.id("uniform-optin");
     private By setAddress = By.id("address1");
     private By setCity = By.id("city");
     private By setState = By.id("id_state");
@@ -28,7 +29,8 @@ public class CreateCustomerPage extends BasePage {
     }
 
     public String getPageTitle(){
-        return driver.findElement(getPageTitle).getText();
+        wait.until(ExpectedConditions.urlContains("account-creation"));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(getPageTitle)).getText();
     }
 
     public CreateCustomerPage setCreateNewCustomer(NewCustomerData newCustomerData){
@@ -46,23 +48,23 @@ public class CreateCustomerPage extends BasePage {
     }
 
     public CreateCustomerPage setMaleGender(){
-        driver.findElement(setMaleGender).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setMaleGender)).click();
         return this;
     }
     public CreateCustomerPage setFemaleGender(){
-        driver.findElement(setFemaleGender).click();
+        wait.until(ExpectedConditions.elementToBeClickable(setFemaleGender)).click();
         return this;
     }
     public CreateCustomerPage setFirstName(String firstName){
-        driver.findElement(setFirstName).sendKeys(firstName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setFirstName)).sendKeys(firstName);
         return this;
     }
     public CreateCustomerPage setLastName(String lastName){
-        driver.findElement(setLastName).sendKeys(lastName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setLastName)).sendKeys(lastName);
         return this;
     }
     public CreateCustomerPage setPassword(String password){
-        driver.findElement(setPassword).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setPassword)).sendKeys(password);
         return this;
     }
     public CreateCustomerPage setDOB(String date, String month, String year){
@@ -75,15 +77,16 @@ public class CreateCustomerPage extends BasePage {
         return this;
     }
     public CreateCustomerPage selectPromo(){
-        driver.findElement(selectPromo).click();
+        wait.until(ExpectedConditions.elementToBeClickable(selectPromo)).click();
         return this;
     }
     public CreateCustomerPage setAddress(String address){
-        driver.findElement(setAddress).sendKeys(address);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setAddress)).sendKeys(address);
         return this;
     }
     public CreateCustomerPage setCity(String city){
-        driver.findElement(setCity).sendKeys(city);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setCity)).sendKeys(city);
         return this;
     }
     public CreateCustomerPage setState(String state) {
@@ -92,15 +95,18 @@ public class CreateCustomerPage extends BasePage {
         return this;
     }
     public CreateCustomerPage setPostCode(String postCode){
-        driver.findElement(setPostCode).sendKeys(postCode);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setPostCode)).sendKeys(postCode);
         return this;
     }
     public CreateCustomerPage setMobileNumber(String mobileNumber){
-        driver.findElement(setMobileNumber).sendKeys(mobileNumber);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(setMobileNumber)).sendKeys(mobileNumber);
         return this;
     }
     public OrderCheckoutPage clickOnSubmitBtn(){
-        driver.findElement(clickOnSubmitBtn).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(clickOnSubmitBtn)).click();
         return new OrderCheckoutPage(driver);
     }
 }
